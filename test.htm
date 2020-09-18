@@ -1,0 +1,56 @@
+<html>
+<body>
+<script>
+
+function showres(){
+var tasks_val= document.getElementById("i1").value;
+var dependencies_val = document.getElementById("i2").value;
+var res1=items_as_per_order(tasks_val,dependencies_val)
+document.body.append("Result: "+"["+res1+"]")
+//document.write("Result: "+"["+res1+"]");
+}
+
+function items_as_per_order(tasks,dependencies){
+var tasks_array = tasks.split(',');
+var dependencies_array = dependencies.split(',');
+var result = [], result1=[];
+//case_1
+if (tasks.length==0 && dependencies.length==0){
+ return result;
+}
+//case_2
+else if(tasks_array.length>-1 && dependencies.length==0){
+  result=tasks_array;
+ return result;
+}
+else {
+if(tasks_array.length > -1 && dependencies_array.length > -1){
+for (var i=0; i<dependencies_array.length; i++){
+     var dependencies_array_item = dependencies_array[i].split(' => ');
+     //case_5
+     if(result.indexOf(dependencies_array_item[0])>-1 && result.indexOf(dependencies_array_item[1])==-1){
+       result.unshift(dependencies_array_item[1]);
+     }
+     //case_6
+     else if(result.indexOf(dependencies_array_item[0])>-1 && result.indexOf(dependencies_array_item[1])>-1){
+      result='Error--this is a cyclic dependency';
+      }
+     //case_3,case_4
+     else{
+     	result.push(dependencies_array_item[1]);
+     	result.push(dependencies_array_item[0]);
+     } 
+   }
+   return result;
+}
+} 
+}
+
+</script>
+Tasks(in comma separated): <input id="i1" type="text" value=""/></br>
+Dependencies(in comma separated): <input id="i2" type="text" value=""/></br>
+<button id="btn" onclick="showres()" style="width: 61px; height:46px"/><br/>
+ENTER
+</button>
+</body>
+</html>
